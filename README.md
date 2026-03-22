@@ -3,6 +3,7 @@
 Semantic diff engine for LLM prompts. Parses prompts into structured representations -- identifying roles, sections, template variables, instructions, constraints, examples, and output format specifications -- then computes a structural diff that reports changes in prompt semantics rather than raw text.
 
 [![npm version](https://img.shields.io/npm/v/prompt-diff.svg)](https://www.npmjs.com/package/prompt-diff)
+[![npm downloads](https://img.shields.io/npm/dt/prompt-diff.svg)](https://www.npmjs.com/package/prompt-diff)
 [![license](https://img.shields.io/npm/l/prompt-diff.svg)](https://github.com/SiluPanda/prompt-diff/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/prompt-diff.svg)](https://nodejs.org)
 
