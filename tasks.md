@@ -6,22 +6,22 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ## Phase 1: Project Scaffolding and Type Definitions
 
-- [ ] **Install dev dependencies** — Add `typescript`, `vitest`, and `eslint` as dev dependencies in `package.json`. Verify `npm install` succeeds. | Status: not_done
-- [ ] **Configure ESLint** — Create `.eslintrc` or `eslint.config.*` with TypeScript support. Ensure `npm run lint` works on the existing `src/index.ts`. | Status: not_done
+- [x] **Install dev dependencies** — Add `typescript`, `vitest`, and `eslint` as dev dependencies in `package.json`. Verify `npm install` succeeds. | Status: done
+- [x] **Configure ESLint** — Create `.eslintrc` or `eslint.config.*` with TypeScript support. Ensure `npm run lint` works on the existing `src/index.ts`. | Status: done
 - [ ] **Add CLI bin entry to package.json** — Add `"bin": { "prompt-diff": "./bin/prompt-diff.js" }` to `package.json` so the CLI is available after install. | Status: not_done
 - [ ] **Create bin/prompt-diff.js** — Create the CLI binary entry point file that requires the compiled `dist/cli.js` and invokes the CLI main function. Include the `#!/usr/bin/env node` shebang. | Status: not_done
-- [ ] **Create src/types.ts with all type definitions** — Define all TypeScript types and interfaces from Spec Section 8: `PromptInput`, `PromptMessage`, `AnthropicPrompt`, `ComparisonMode`, `DiffOptions`, `SectionPattern`, `IgnorePattern`, `PromptStructure`, `RoleBlock`, `Section`, `Variable`, `Instruction`, `Constraint`, `ExampleBlock`, `SingleExample`, `OutputFormatSpec`, `PromptChange`, `ChangeType`, `DiffSegment`, `TokenImpact`, `PromptDiff`, `OutputFormat`. | Status: not_done
+- [x] **Create src/types.ts with all type definitions** — Define all TypeScript types and interfaces from Spec Section 8: `PromptInput`, `PromptMessage`, `AnthropicPrompt`, `ComparisonMode`, `DiffOptions`, `SectionPattern`, `IgnorePattern`, `PromptStructure`, `RoleBlock`, `Section`, `Variable`, `Instruction`, `Constraint`, `ExampleBlock`, `SingleExample`, `OutputFormatSpec`, `PromptChange`, `ChangeType`, `DiffSegment`, `TokenImpact`, `PromptDiff`, `OutputFormat`. | Status: done
 - [ ] **Create file structure directories** — Create all directories specified in Spec Section 18: `src/parser/`, `src/align/`, `src/engine/`, `src/formatters/`, `src/utils/`, `src/__tests__/`, `src/__tests__/parser/`, `src/__tests__/align/`, `src/__tests__/engine/`, `src/__tests__/formatters/`, `src/__tests__/fixtures/before/`, `src/__tests__/fixtures/after/`, `bin/`. | Status: not_done
-- [ ] **Create src/index.ts public API exports** — Set up the main entry point to re-export `diff`, `parse`, `format`, `apply`, `summarize`, and all public types from their respective modules. | Status: not_done
+- [x] **Create src/index.ts public API exports** — Set up the main entry point to re-export `diff`, `parse`, `format`, `apply`, `summarize`, and all public types from their respective modules. | Status: done
 
 ---
 
 ## Phase 2: Utility Modules
 
-- [ ] **Implement src/utils/text.ts — text normalization** — Implement text normalization for semantic mode: strip trailing whitespace from lines, collapse multiple blank lines to single blank line, trim leading/trailing whitespace from section content. | Status: not_done
-- [ ] **Implement src/utils/text.ts — word tokenization** — Implement word tokenizer that splits text into word tokens for the word-level diff algorithm. Handle punctuation, whitespace, and special characters. | Status: not_done
+- [x] **Implement src/utils/text.ts — text normalization** — Implement text normalization for semantic mode: strip trailing whitespace from lines, collapse multiple blank lines to single blank line, trim leading/trailing whitespace from section content. | Status: done
+- [x] **Implement src/utils/text.ts — word tokenization** — Implement word tokenizer that splits text into word tokens for the word-level diff algorithm. Handle punctuation, whitespace, and special characters. | Status: done
 - [ ] **Implement src/utils/text.ts — whitespace utilities** — Implement helper functions: `isWhitespaceOnly(text)`, `normalizeWhitespace(text)`, `collapseBlankLines(text)`. | Status: not_done
-- [ ] **Implement src/utils/hash.ts — content hashing** — Implement content hashing using `node:crypto.createHash` for patch file integrity verification. Produce short hex hashes of prompt content. | Status: not_done
+- [x] **Implement src/utils/hash.ts — content hashing** — Implement content hashing using `node:crypto.createHash` for patch file integrity verification. Produce short hex hashes of prompt content. | Status: done
 
 ---
 
@@ -29,111 +29,111 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ### Format Detection and Dispatch
 
-- [ ] **Implement src/parser/index.ts — parser entry point** — Create the `parse(source, options?)` function that detects the input format and dispatches to the appropriate sub-parser. Return a `PromptStructure`. | Status: not_done
-- [ ] **Implement format detection logic** — Auto-detect format per Spec Section 5: (1) JSON with `messages` array of `{role, content}` objects = message-array, (2) JSON with `system` string + `messages` array = Anthropic, (3) YAML with structured sections = structured, (4) otherwise plain-text. Also handle programmatic JS object inputs by shape. | Status: not_done
-- [ ] **Handle `{ file: string }` input** — When `PromptInput` is `{ file: string }`, read the file from disk using `node:fs/promises.readFile` and then parse the content. | Status: not_done
-- [ ] **Compute metadata fields on PromptStructure** — After parsing, populate `characterCount` (total chars), `estimatedTokens` (chars / 4), `format`, and `templateSyntax` fields on the returned `PromptStructure`. | Status: not_done
+- [x] **Implement src/parser/index.ts — parser entry point** — Create the `parse(source, options?)` function that detects the input format and dispatches to the appropriate sub-parser. Return a `PromptStructure`. | Status: done
+- [x] **Implement format detection logic** — Auto-detect format per Spec Section 5: (1) JSON with `messages` array of `{role, content}` objects = message-array, (2) JSON with `system` string + `messages` array = Anthropic, (3) YAML with structured sections = structured, (4) otherwise plain-text. Also handle programmatic JS object inputs by shape. | Status: done
+- [x] **Handle `{ file: string }` input** — When `PromptInput` is `{ file: string }`, read the file from disk using `node:fs/promises.readFile` and then parse the content. | Status: done
+- [x] **Compute metadata fields on PromptStructure** — After parsing, populate `characterCount` (total chars), `estimatedTokens` (chars / 4), `format`, and `templateSyntax` fields on the returned `PromptStructure`. | Status: done
 
 ### Plain Text Parser
 
-- [ ] **Implement src/parser/parse-plain-text.ts** — Parse plain text prompts into `PromptStructure`. Orchestrate role detection, section detection, variable extraction, instruction detection, constraint detection, example detection, and output format detection on the input text. | Status: not_done
+- [x] **Implement src/parser/parse-plain-text.ts** — Parse plain text prompts into `PromptStructure`. Orchestrate role detection, section detection, variable extraction, instruction detection, constraint detection, example detection, and output format detection on the input text. | Status: done
 
 ### Role Detection
 
-- [ ] **Implement src/parser/role-detector.ts — markdown header roles** — Detect role boundaries using markdown headers: `# System`, `## System Prompt`, `# User`, `# Assistant` (case-insensitive). | Status: not_done
-- [ ] **Implement role-detector.ts — label pattern roles** — Detect role boundaries using label patterns: `System:`, `User:`, `Assistant:`, `Human:`, `AI:` at the start of a line. | Status: not_done
-- [ ] **Implement role-detector.ts — XML tag roles** — Detect role boundaries using XML tags: `<system>`, `<user>`, `<assistant>` wrapping content blocks. | Status: not_done
+- [x] **Implement src/parser/role-detector.ts — markdown header roles** — Detect role boundaries using markdown headers: `# System`, `## System Prompt`, `# User`, `# Assistant` (case-insensitive). | Status: done
+- [x] **Implement role-detector.ts — label pattern roles** — Detect role boundaries using label patterns: `System:`, `User:`, `Assistant:`, `Human:`, `AI:` at the start of a line. | Status: done
+- [x] **Implement role-detector.ts — XML tag roles** — Detect role boundaries using XML tags: `<system>`, `<user>`, `<assistant>` wrapping content blocks. | Status: done
 - [ ] **Implement role-detector.ts — Anthropic legacy format** — Detect role boundaries using `\n\nHuman:` and `\n\nAssistant:` markers. | Status: not_done
-- [ ] **Implement role-detector.ts — implicit single role** — When no role markers are detected, treat the entire text as a single implicit system role block. | Status: not_done
-- [ ] **Populate RoleBlock fields** — For each detected role, create a `RoleBlock` with `role`, `content`, `startOffset`, `endOffset`, and empty `sections` array. | Status: not_done
+- [x] **Implement role-detector.ts — implicit single role** — When no role markers are detected, treat the entire text as a single implicit system role block. | Status: done
+- [x] **Populate RoleBlock fields** — For each detected role, create a `RoleBlock` with `role`, `content`, `startOffset`, `endOffset`, and empty `sections` array. | Status: done
 
 ### Section Detection
 
-- [ ] **Implement src/parser/section-detector.ts — markdown header sections** — Detect section boundaries using `#`, `##`, `###` headers. Extract header text as section title. Set `type: 'header'`. | Status: not_done
-- [ ] **Implement section-detector.ts — XML tag sections** — Detect section boundaries using XML tags: `<instructions>`, `<context>`, `<examples>`, `<output>`, `<rules>`, `<constraints>`, etc. Tag name becomes section title. Set `type: 'xml-tag'`. | Status: not_done
-- [ ] **Implement section-detector.ts — labeled block sections** — Detect section boundaries using label patterns: `Instructions:`, `Output Format:`, `Examples:`, `Context:`, `Rules:`, `Constraints:` at line start. Set `type: 'label'`. | Status: not_done
-- [ ] **Implement section-detector.ts — horizontal rule sections** — Detect section boundaries using `---`, `***`, `___` on their own line. Section title is null. Set `type: 'separator'`. | Status: not_done
-- [ ] **Support custom section patterns** — Accept `customSectionPatterns` from `DiffOptions` and apply them alongside built-in section detectors. Custom patterns should use the `SectionPattern` interface with `startPattern`, optional `endPattern`, and `titleGroup`. | Status: not_done
-- [ ] **Populate Section fields** — For each detected section, create a `Section` with `title`, `type`, `content`, `startOffset`, `endOffset`, `roleIndex`, and `positionIndex`. Assign sections to their parent `RoleBlock.sections`. | Status: not_done
+- [x] **Implement src/parser/section-detector.ts — markdown header sections** — Detect section boundaries using `#`, `##`, `###` headers. Extract header text as section title. Set `type: 'header'`. | Status: done
+- [x] **Implement section-detector.ts — XML tag sections** — Detect section boundaries using XML tags: `<instructions>`, `<context>`, `<examples>`, `<output>`, `<rules>`, `<constraints>`, etc. Tag name becomes section title. Set `type: 'xml-tag'`. | Status: done
+- [x] **Implement section-detector.ts — labeled block sections** — Detect section boundaries using label patterns: `Instructions:`, `Output Format:`, `Examples:`, `Context:`, `Rules:`, `Constraints:` at line start. Set `type: 'label'`. | Status: done
+- [x] **Implement section-detector.ts — horizontal rule sections** — Detect section boundaries using `---`, `***`, `___` on their own line. Section title is null. Set `type: 'separator'`. | Status: done
+- [x] **Support custom section patterns** — Accept `customSectionPatterns` from `DiffOptions` and apply them alongside built-in section detectors. Custom patterns should use the `SectionPattern` interface with `startPattern`, optional `endPattern`, and `titleGroup`. | Status: done
+- [x] **Populate Section fields** — For each detected section, create a `Section` with `title`, `type`, `content`, `startOffset`, `endOffset`, `roleIndex`, and `positionIndex`. Assign sections to their parent `RoleBlock.sections`. | Status: done
 
 ### Variable Extraction
 
-- [ ] **Implement src/parser/variable-extractor.ts — Handlebars/Mustache syntax** — Extract variables matching `{{variableName}}` pattern. | Status: not_done
-- [ ] **Implement variable-extractor.ts — Jinja2 syntax** — Extract variables matching `{{ variableName }}` pattern (with spaces). | Status: not_done
-- [ ] **Implement variable-extractor.ts — f-string syntax** — Extract variables matching `{variableName}` pattern. Avoid false positives from JSON/code blocks. | Status: not_done
-- [ ] **Implement variable-extractor.ts — Dollar syntax** — Extract variables matching `$variableName` and `${variableName}` patterns. | Status: not_done
-- [ ] **Implement variable-extractor.ts — auto-detect template syntax** — When `templateSyntax` is `'auto'`, detect the dominant syntax used in the document. Report `'mixed'` if multiple syntaxes are present. | Status: not_done
-- [ ] **Populate Variable fields** — For each extracted variable, create a `Variable` with `name`, `syntax`, and `occurrences` (array of `{ startOffset, endOffset }`). | Status: not_done
+- [x] **Implement src/parser/variable-extractor.ts — Handlebars/Mustache syntax** — Extract variables matching `{{variableName}}` pattern. | Status: done
+- [x] **Implement variable-extractor.ts — Jinja2 syntax** — Extract variables matching `{{ variableName }}` pattern (with spaces). | Status: done
+- [x] **Implement variable-extractor.ts — f-string syntax** — Extract variables matching `{variableName}` pattern. Avoid false positives from JSON/code blocks. | Status: done
+- [x] **Implement variable-extractor.ts — Dollar syntax** — Extract variables matching `$variableName` and `${variableName}` patterns. | Status: done
+- [x] **Implement variable-extractor.ts — auto-detect template syntax** — When `templateSyntax` is `'auto'`, detect the dominant syntax used in the document. Report `'mixed'` if multiple syntaxes are present. | Status: done
+- [x] **Populate Variable fields** — For each extracted variable, create a `Variable` with `name`, `syntax`, and `occurrences` (array of `{ startOffset, endOffset }`). | Status: done
 
 ### Instruction Detection
 
-- [ ] **Implement src/parser/instruction-detector.ts — imperative verb detection** — Detect sentences starting with imperative verbs: "Write", "Generate", "Analyze", "Return", "Always", "Never", "Do not", "Make sure", "Ensure", "You must", "You should", "You will". | Status: not_done
-- [ ] **Implement instruction-detector.ts — modal directive detection** — Detect sentences containing modal directives: "must", "should", "shall", "need to", "have to". | Status: not_done
-- [ ] **Implement instruction-detector.ts — bullet point instructions** — Detect bullet points and numbered items within instruction-labeled sections as instructions. | Status: not_done
-- [ ] **Populate Instruction fields** — For each detected instruction, create an `Instruction` with `text`, `startOffset`, `endOffset`, and `sectionIndex`. | Status: not_done
+- [x] **Implement src/parser/instruction-detector.ts — imperative verb detection** — Detect sentences starting with imperative verbs: "Write", "Generate", "Analyze", "Return", "Always", "Never", "Do not", "Make sure", "Ensure", "You must", "You should", "You will". | Status: done
+- [x] **Implement instruction-detector.ts — modal directive detection** — Detect sentences containing modal directives: "must", "should", "shall", "need to", "have to". | Status: done
+- [x] **Implement instruction-detector.ts — bullet point instructions** — Detect bullet points and numbered items within instruction-labeled sections as instructions. | Status: done
+- [x] **Populate Instruction fields** — For each detected instruction, create an `Instruction` with `text`, `startOffset`, `endOffset`, and `sectionIndex`. | Status: done
 
 ### Constraint Detection
 
-- [ ] **Implement src/parser/constraint-detector.ts — restriction language** — Detect sentences containing: "only", "never", "do not", "must not", "cannot", "at most", "no more than", "limit to", "restrict to", "exclusively". | Status: not_done
-- [ ] **Implement constraint-detector.ts — quantitative limits** — Detect sentences with quantitative limits: numbers followed by limit language ("maximum 3 sentences", "no more than 500 tokens", "limit your response to 2 paragraphs"). | Status: not_done
-- [ ] **Implement constraint-detector.ts — negative imperatives** — Detect negative imperative patterns: "Do not", "Never", "Avoid", "Refrain from". | Status: not_done
-- [ ] **Implement constraint-detector.ts — numeric value extraction** — Extract the numeric limit value from constraint text (e.g., "3" from "maximum 3 sentences") and store in `Constraint.numericValue`. | Status: not_done
-- [ ] **Populate Constraint fields** — For each detected constraint, create a `Constraint` with `text`, `startOffset`, `endOffset`, `numericValue`, and `sectionIndex`. | Status: not_done
+- [x] **Implement src/parser/constraint-detector.ts — restriction language** — Detect sentences containing: "only", "never", "do not", "must not", "cannot", "at most", "no more than", "limit to", "restrict to", "exclusively". | Status: done
+- [x] **Implement constraint-detector.ts — quantitative limits** — Detect sentences with quantitative limits: numbers followed by limit language ("maximum 3 sentences", "no more than 500 tokens", "limit your response to 2 paragraphs"). | Status: done
+- [x] **Implement constraint-detector.ts — negative imperatives** — Detect negative imperative patterns: "Do not", "Never", "Avoid", "Refrain from". | Status: done
+- [x] **Implement constraint-detector.ts — numeric value extraction** — Extract the numeric limit value from constraint text (e.g., "3" from "maximum 3 sentences") and store in `Constraint.numericValue`. | Status: done
+- [x] **Populate Constraint fields** — For each detected constraint, create a `Constraint` with `text`, `startOffset`, `endOffset`, `numericValue`, and `sectionIndex`. | Status: done
 
 ### Example Block Detection
 
-- [ ] **Implement src/parser/example-detector.ts — labeled example sections** — Detect sections explicitly labeled "Examples", "Example", "Few-shot examples". | Status: not_done
-- [ ] **Implement example-detector.ts — numbered example patterns** — Detect numbered patterns: `Example 1:`, `1.`, `1)` followed by structured content. | Status: not_done
-- [ ] **Implement example-detector.ts — input/output pair detection** — Detect input/output pairs: `Input:` / `Output:`, `Q:` / `A:`, `User:` / `Assistant:` within example sections. | Status: not_done
+- [x] **Implement src/parser/example-detector.ts — labeled example sections** — Detect sections explicitly labeled "Examples", "Example", "Few-shot examples". | Status: done
+- [x] **Implement example-detector.ts — numbered example patterns** — Detect numbered patterns: `Example 1:`, `1.`, `1)` followed by structured content. | Status: done
+- [x] **Implement example-detector.ts — input/output pair detection** — Detect input/output pairs: `Input:` / `Output:`, `Q:` / `A:`, `User:` / `Assistant:` within example sections. | Status: done
 - [ ] **Implement example-detector.ts — XML-tagged examples** — Detect `<example>` and `<examples>` XML tags. | Status: not_done
-- [ ] **Populate ExampleBlock and SingleExample fields** — For each detected example block, create an `ExampleBlock` with `content`, `examples` (array of `SingleExample` with `input`, `output`, `text`, `index`), `startOffset`, `endOffset`, and `sectionIndex`. | Status: not_done
+- [x] **Populate ExampleBlock and SingleExample fields** — For each detected example block, create an `ExampleBlock` with `content`, `examples` (array of `SingleExample` with `input`, `output`, `text`, `index`), `startOffset`, `endOffset`, and `sectionIndex`. | Status: done
 
 ### Output Format Detection
 
-- [ ] **Implement src/parser/output-format-detector.ts — labeled output sections** — Detect sections labeled "Output Format", "Response Format", "Output", "Expected Output". | Status: not_done
-- [ ] **Implement output-format-detector.ts — JSON/YAML schema blocks** — Detect fenced code blocks with `json` or `yaml` language markers containing schema-like structures. | Status: not_done
-- [ ] **Implement output-format-detector.ts — explicit format instructions** — Detect instructions like "Respond in JSON", "Return a JSON object", "Format your response as", "Use the following schema". | Status: not_done
-- [ ] **Implement output-format-detector.ts — format type classification** — Classify the detected format as `'json'`, `'yaml'`, `'markdown'`, `'csv'`, `'xml'`, `'plain-text'`, or `'custom'`. | Status: not_done
-- [ ] **Populate OutputFormatSpec fields** — Create an `OutputFormatSpec` with `format`, `content`, `startOffset`, and `endOffset`. Set `PromptStructure.outputFormat` to null if no output format is detected. | Status: not_done
+- [x] **Implement src/parser/output-format-detector.ts — labeled output sections** — Detect sections labeled "Output Format", "Response Format", "Output", "Expected Output". | Status: done
+- [x] **Implement output-format-detector.ts — JSON/YAML schema blocks** — Detect fenced code blocks with `json` or `yaml` language markers containing schema-like structures. | Status: done
+- [x] **Implement output-format-detector.ts — explicit format instructions** — Detect instructions like "Respond in JSON", "Return a JSON object", "Format your response as", "Use the following schema". | Status: done
+- [x] **Implement output-format-detector.ts — format type classification** — Classify the detected format as `'json'`, `'yaml'`, `'markdown'`, `'csv'`, `'xml'`, `'plain-text'`, or `'custom'`. | Status: done
+- [x] **Populate OutputFormatSpec fields** — Create an `OutputFormatSpec` with `format`, `content`, `startOffset`, and `endOffset`. Set `PromptStructure.outputFormat` to null if no output format is detected. | Status: done
 
 ### Message Array Parser
 
-- [ ] **Implement src/parser/parse-messages.ts — OpenAI format** — Parse `PromptMessage[]` (array of `{role, content}` objects) into `PromptStructure`. Each message becomes a `RoleBlock`. Run section detection, variable extraction, instruction detection, constraint detection, example detection, and output format detection on each message's content. | Status: not_done
-- [ ] **Implement parse-messages.ts — Anthropic format** — Parse `AnthropicPrompt` (object with `system` string and `messages` array) into `PromptStructure`. The `system` field becomes a system `RoleBlock`. Each message becomes its corresponding `RoleBlock`. | Status: not_done
+- [x] **Implement src/parser/parse-messages.ts — OpenAI format** — Parse `PromptMessage[]` (array of `{role, content}` objects) into `PromptStructure`. Each message becomes a `RoleBlock`. Run section detection, variable extraction, instruction detection, constraint detection, example detection, and output format detection on each message's content. | Status: done
+- [x] **Implement parse-messages.ts — Anthropic format** — Parse `AnthropicPrompt` (object with `system` string and `messages` array) into `PromptStructure`. The `system` field becomes a system `RoleBlock`. Each message becomes its corresponding `RoleBlock`. | Status: done
 
 ---
 
 ## Phase 4: Structural Alignment
 
-- [ ] **Implement src/align/index.ts — alignment orchestrator** — Create the main alignment function that takes two `PromptStructure` objects and returns alignment mappings for roles, sections, variables, examples, instructions, and constraints. | Status: not_done
+- [x] **Implement src/align/index.ts — alignment orchestrator** — Create the main alignment function that takes two `PromptStructure` objects and returns alignment mappings for roles, sections, variables, examples, instructions, and constraints. | Status: done
 
 ### Role Alignment
 
-- [ ] **Implement src/align/role-aligner.ts** — Match roles by role identifier (system-to-system, user-to-user, assistant-to-assistant). Mark roles present in A but not B as removed. Mark roles present in B but not A as added. | Status: not_done
+- [x] **Implement src/align/role-aligner.ts** — Match roles by role identifier (system-to-system, user-to-user, assistant-to-assistant). Mark roles present in A but not B as removed. Mark roles present in B but not A as added. | Status: done
 
 ### Section Alignment
 
-- [ ] **Implement src/align/section-aligner.ts — Pass 1: title matching** — For each pair of matched role blocks, match sections with identical titles (case-insensitive) regardless of position. This handles section reordering. | Status: not_done
-- [ ] **Implement section-aligner.ts — Pass 2: content similarity matching** — For unmatched sections after Pass 1, compute normalized content similarity (Jaccard similarity on word sets). Match sections with similarity above `sectionMatchThreshold` (default 0.6). This handles renamed sections. | Status: not_done
-- [ ] **Implement section-aligner.ts — unmatched handling** — Sections in A with no match are marked as removed. Sections in B with no match are marked as added. | Status: not_done
+- [x] **Implement src/align/section-aligner.ts — Pass 1: title matching** — For each pair of matched role blocks, match sections with identical titles (case-insensitive) regardless of position. This handles section reordering. | Status: done
+- [x] **Implement section-aligner.ts — Pass 2: content similarity matching** — For unmatched sections after Pass 1, compute normalized content similarity (Jaccard similarity on word sets). Match sections with similarity above `sectionMatchThreshold` (default 0.6). This handles renamed sections. | Status: done
+- [x] **Implement section-aligner.ts — unmatched handling** — Sections in A with no match are marked as removed. Sections in B with no match are marked as added. | Status: done
 
 ### Similarity Functions
 
-- [ ] **Implement src/align/similarity.ts — Jaccard similarity** — Implement Jaccard similarity on word sets: `|intersection| / |union|`. Used for section content similarity. | Status: not_done
-- [ ] **Implement similarity.ts — normalized text similarity** — Implement normalized text comparison that collapses whitespace, lowercases, and computes word-level overlap. Used for instruction/constraint alignment. | Status: not_done
+- [x] **Implement src/align/similarity.ts — Jaccard similarity** — Implement Jaccard similarity on word sets: `|intersection| / |union|`. Used for section content similarity. | Status: done
+- [x] **Implement similarity.ts — normalized text similarity** — Implement normalized text comparison that collapses whitespace, lowercases, and computes word-level overlap. Used for instruction/constraint alignment. | Status: done
 
 ### Variable Alignment
 
-- [ ] **Implement src/align/variable-aligner.ts — name matching** — Match variables by identical name across both prompts. | Status: not_done
-- [ ] **Implement variable-aligner.ts — rename candidate detection** — For unmatched variables (removed from A, added in B), check if they share identical surrounding context (text before and after the variable reference). Flag as rename candidates. | Status: not_done
+- [x] **Implement src/align/variable-aligner.ts — name matching** — Match variables by identical name across both prompts. | Status: done
+- [x] **Implement variable-aligner.ts — rename candidate detection** — For unmatched variables (removed from A, added in B), check if they share identical surrounding context (text before and after the variable reference). Flag as rename candidates. | Status: done
 
 ### Example Alignment
 
-- [ ] **Implement src/align/example-aligner.ts** — Align examples within matched example sections by index (example 1 to example 1, etc.). When the number of examples differs, mark trailing examples as added or removed. When content similarity is below threshold, fall back to positional alignment. | Status: not_done
+- [x] **Implement src/align/example-aligner.ts** — Align examples within matched example sections by index (example 1 to example 1, etc.). When the number of examples differs, mark trailing examples as added or removed. When content similarity is below threshold, fall back to positional alignment. | Status: done
 
 ### Instruction and Constraint Alignment
 
-- [ ] **Implement src/align/instruction-aligner.ts** — Align instructions and constraints within matched sections using normalized text similarity. Exact matches first, then near-matches with similarity above 0.7. Mark unmatched as added/removed. | Status: not_done
+- [x] **Implement src/align/instruction-aligner.ts** — Align instructions and constraints within matched sections using normalized text similarity. Exact matches first, then near-matches with similarity above 0.7. Mark unmatched as added/removed. | Status: done
 
 ---
 
@@ -141,28 +141,28 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ### Text Diff
 
-- [ ] **Implement src/engine/text-diff.ts — Myers diff algorithm** — Implement a word-level diff algorithm based on Myers' algorithm (longest common subsequence). Split text into word tokens, compute LCS, identify inserted/deleted/unchanged words. | Status: not_done
-- [ ] **Implement text-diff.ts — hunk grouping** — Group contiguous changes into hunks for readable output. Each hunk contains a sequence of `DiffSegment` objects marked as `'added'`, `'removed'`, or `'unchanged'`. | Status: not_done
-- [ ] **Implement text-diff.ts — comparison mode normalization** — For `semantic` mode, normalize text before diffing (collapse whitespace, trim). For `strict` mode, compare as-is. For `structural` mode, suppress text diffs entirely. | Status: not_done
+- [x] **Implement src/engine/text-diff.ts — Myers diff algorithm** — Implement a word-level diff algorithm based on Myers' algorithm (longest common subsequence). Split text into word tokens, compute LCS, identify inserted/deleted/unchanged words. | Status: done
+- [x] **Implement text-diff.ts — hunk grouping** — Group contiguous changes into hunks for readable output. Each hunk contains a sequence of `DiffSegment` objects marked as `'added'`, `'removed'`, or `'unchanged'`. | Status: done
+- [x] **Implement text-diff.ts — comparison mode normalization** — For `semantic` mode, normalize text before diffing (collapse whitespace, trim). For `strict` mode, compare as-is. For `structural` mode, suppress text diffs entirely. | Status: done
 
 ### Change Classification
 
-- [ ] **Implement src/engine/change-classifier.ts — role changes** — Classify role changes: `role-added`, `role-removed`, `role-content-changed`. | Status: not_done
-- [ ] **Implement change-classifier.ts — section changes** — Classify section changes: `section-added`, `section-removed`, `section-modified`, `section-moved`, `section-renamed`. | Status: not_done
-- [ ] **Implement change-classifier.ts — variable changes** — Classify variable changes: `variable-added`, `variable-removed`, `variable-renamed`. | Status: not_done
-- [ ] **Implement change-classifier.ts — example changes** — Classify example changes: `example-added`, `example-removed`, `example-modified`. | Status: not_done
-- [ ] **Implement change-classifier.ts — instruction changes** — Classify instruction changes: `instruction-added`, `instruction-removed`, `instruction-modified`. | Status: not_done
-- [ ] **Implement change-classifier.ts — constraint changes** — Classify constraint changes: `constraint-added`, `constraint-removed`, `constraint-relaxed`, `constraint-tightened`, `constraint-modified`. | Status: not_done
-- [ ] **Implement change-classifier.ts — output format changes** — Classify output format changes: `output-format-changed`. | Status: not_done
-- [ ] **Implement change-classifier.ts — formatting changes** — Classify formatting-only changes: `whitespace-only`, `formatting-only`. Detect when only whitespace or markdown formatting (bold/italic, indentation) differs. | Status: not_done
-- [ ] **Implement change-classifier.ts — severity assignment** — Assign severity to each change per Spec Section 7: `high` (role-added, role-removed, constraint-removed, constraint-relaxed, output-format-changed, variable-removed), `medium` (most content changes), `low` (section-modified, section-moved, section-renamed), `none` (whitespace-only, formatting-only). | Status: not_done
-- [ ] **Generate human-readable description per change** — For each `PromptChange`, generate a `description` string (e.g., "Section 'Examples' moved from position 3 to position 5", "Variable {{name}} renamed to {{full_name}}"). | Status: not_done
+- [x] **Implement src/engine/change-classifier.ts — role changes** — Classify role changes: `role-added`, `role-removed`, `role-content-changed`. | Status: done
+- [x] **Implement change-classifier.ts — section changes** — Classify section changes: `section-added`, `section-removed`, `section-modified`, `section-moved`, `section-renamed`. | Status: done
+- [x] **Implement change-classifier.ts — variable changes** — Classify variable changes: `variable-added`, `variable-removed`, `variable-renamed`. | Status: done
+- [x] **Implement change-classifier.ts — example changes** — Classify example changes: `example-added`, `example-removed`, `example-modified`. | Status: done
+- [x] **Implement change-classifier.ts — instruction changes** — Classify instruction changes: `instruction-added`, `instruction-removed`, `instruction-modified`. | Status: done
+- [x] **Implement change-classifier.ts — constraint changes** — Classify constraint changes: `constraint-added`, `constraint-removed`, `constraint-relaxed`, `constraint-tightened`, `constraint-modified`. | Status: done
+- [x] **Implement change-classifier.ts — output format changes** — Classify output format changes: `output-format-changed`. | Status: done
+- [x] **Implement change-classifier.ts — formatting changes** — Classify formatting-only changes: `whitespace-only`, `formatting-only`. Detect when only whitespace or markdown formatting (bold/italic, indentation) differs. | Status: done
+- [x] **Implement change-classifier.ts — severity assignment** — Assign severity to each change per Spec Section 7: `high` (role-added, role-removed, constraint-removed, constraint-relaxed, output-format-changed, variable-removed), `medium` (most content changes), `low` (section-modified, section-moved, section-renamed), `none` (whitespace-only, formatting-only). | Status: done
+- [x] **Generate human-readable description per change** — For each `PromptChange`, generate a `description` string (e.g., "Section 'Examples' moved from position 3 to position 5", "Variable {{name}} renamed to {{full_name}}"). | Status: done
 
 ### Constraint Classification
 
-- [ ] **Implement src/engine/constraint-classifier.ts — numeric limit changes** — Detect when a numeric value in a constraint increased (relaxed) or decreased (tightened). | Status: not_done
-- [ ] **Implement constraint-classifier.ts — restriction language changes** — Detect when restrictive language ("only", "never", "must not") was added (tightened) or removed (relaxed). | Status: not_done
-- [ ] **Implement constraint-classifier.ts — ambiguous changes** — When a constraint change cannot be clearly classified as relaxation or tightening, report as `constraint-modified`. | Status: not_done
+- [x] **Implement src/engine/constraint-classifier.ts — numeric limit changes** — Detect when a numeric value in a constraint increased (relaxed) or decreased (tightened). | Status: done
+- [x] **Implement constraint-classifier.ts — restriction language changes** — Detect when restrictive language ("only", "never", "must not") was added (tightened) or removed (relaxed). | Status: done
+- [x] **Implement constraint-classifier.ts — ambiguous changes** — When a constraint change cannot be clearly classified as relaxation or tightening, report as `constraint-modified`. | Status: done
 
 ### Move Detection
 
@@ -174,30 +174,30 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ### Token Counting
 
-- [ ] **Implement src/engine/token-counter.ts — per-change token impact** — For each `PromptChange`, compute `tokensAdded` and `tokensRemoved` using chars/4 heuristic. Additions: tokensAdded = len(after)/4, tokensRemoved = 0. Removals: inverse. Modifications: both. Moves: both = 0. | Status: not_done
-- [ ] **Implement token-counter.ts — aggregate TokenImpact** — Compute `totalAdded`, `totalRemoved`, `net`, `beforeTokens`, and `afterTokens` by summing per-change values and estimating prompt-level token counts. | Status: not_done
+- [x] **Implement src/engine/token-counter.ts — per-change token impact** — For each `PromptChange`, compute `tokensAdded` and `tokensRemoved` using chars/4 heuristic. Additions: tokensAdded = len(after)/4, tokensRemoved = 0. Removals: inverse. Modifications: both. Moves: both = 0. | Status: done
+- [x] **Implement token-counter.ts — aggregate TokenImpact** — Compute `totalAdded`, `totalRemoved`, `net`, `beforeTokens`, and `afterTokens` by summing per-change values and estimating prompt-level token counts. | Status: done
 
 ### Core Diff Function
 
-- [ ] **Implement src/engine/index.ts — diff engine entry point** — Orchestrate the diff engine: receive aligned pairs, compute text diffs, classify changes, detect moves and renames, compute token impact. Return array of `PromptChange` objects. | Status: not_done
-- [ ] **Implement src/diff.ts — main diff() function** — Implement the top-level `diff(promptA, promptB, options?)` function that runs all four phases (parse, align, diff, classify), measures execution time, and returns a complete `PromptDiff` object with `identical`, `changes`, `summary`, `tokenImpact`, `mode`, `structureA`, `structureB`, `durationMs`, `timestamp`, `changeCounts`, and `severityCounts`. | Status: not_done
-- [ ] **Implement diff.ts — sorting changes** — Sort changes by severity (high first), then by position within the prompt. | Status: not_done
-- [ ] **Implement diff.ts — changeCounts and severityCounts** — Compute `changeCounts` (Record<string, number> by category) and `severityCounts` (Record<severity, number>) aggregation fields. | Status: not_done
+- [x] **Implement src/engine/index.ts — diff engine entry point** — Orchestrate the diff engine: receive aligned pairs, compute text diffs, classify changes, detect moves and renames, compute token impact. Return array of `PromptChange` objects. | Status: done
+- [x] **Implement src/diff.ts — main diff() function** — Implement the top-level `diff(promptA, promptB, options?)` function that runs all four phases (parse, align, diff, classify), measures execution time, and returns a complete `PromptDiff` object with `identical`, `changes`, `summary`, `tokenImpact`, `mode`, `structureA`, `structureB`, `durationMs`, `timestamp`, `changeCounts`, and `severityCounts`. | Status: done
+- [x] **Implement diff.ts — sorting changes** — Sort changes by severity (high first), then by position within the prompt. | Status: done
+- [x] **Implement diff.ts — changeCounts and severityCounts** — Compute `changeCounts` (Record<string, number> by category) and `severityCounts` (Record<severity, number>) aggregation fields. | Status: done
 
 ---
 
 ## Phase 6: Output Formatters
 
-- [ ] **Implement src/formatters/index.ts — formatter factory** — Create the `format(diff, outputFormat)` function that dispatches to the appropriate formatter based on `OutputFormat` value. | Status: not_done
+- [x] **Implement src/formatters/index.ts — formatter factory** — Create the `format(diff, outputFormat)` function that dispatches to the appropriate formatter based on `OutputFormat` value. | Status: done
 
 ### Terminal Formatter
 
-- [ ] **Implement src/formatters/terminal.ts — colored output** — Render a `PromptDiff` as colored terminal output with ANSI escape codes. Include header with version/mode info, summary box with change count and token impact, changes grouped by severity with colored badges (HIGH/MEDIUM/LOW), red/green text diffs for modifications, and footer with totals and timing. | Status: not_done
+- [x] **Implement src/formatters/terminal.ts — colored output** — Render a `PromptDiff` as colored terminal output with ANSI escape codes. Include header with version/mode info, summary box with change count and token impact, changes grouped by severity with colored badges (HIGH/MEDIUM/LOW), red/green text diffs for modifications, and footer with totals and timing. | Status: done
 - [ ] **Implement terminal.ts — NO_COLOR support** — Respect the `NO_COLOR` environment variable and `--no-color` flag. When color is disabled, output plain text without ANSI codes. Use `process.stdout.isTTY` for auto-detection. | Status: not_done
 
 ### JSON Formatter
 
-- [ ] **Implement src/formatters/json.ts** — Render a `PromptDiff` as a JSON string. By default omit `structureA` and `structureB` to reduce size. Include them when `--include-structures` flag is set. Output valid, parseable JSON. | Status: not_done
+- [x] **Implement src/formatters/json.ts** — Render a `PromptDiff` as a JSON string. By default omit `structureA` and `structureB` to reduce size. Include them when `--include-structures` flag is set. Output valid, parseable JSON. | Status: done
 
 ### Markdown Formatter
 
@@ -205,7 +205,7 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ### Summary Formatter
 
-- [ ] **Implement src/formatters/summary.ts** — Render a `PromptDiff` as one-line-per-change summary. Format: `[SEVERITY] change-type: description`. Append token impact line at the end. | Status: not_done
+- [x] **Implement src/formatters/summary.ts** — Render a `PromptDiff` as one-line-per-change summary. Format: `[SEVERITY] change-type: description`. Append token impact line at the end. | Status: done
 
 ### Patch Formatter
 
@@ -215,7 +215,7 @@ This file tracks all implementation tasks derived from SPEC.md. Each task is gra
 
 ## Phase 7: Summarize and Apply Functions
 
-- [ ] **Implement src/summarize.ts** — Implement the `summarize(diff)` function that returns a concise human-readable summary string (e.g., "3 changes: 1 instruction modified, 1 example added, variable {{name}} renamed to {{full_name}}. Token impact: +45 tokens."). Group by change type and count. | Status: not_done
+- [x] **Implement src/summarize.ts** — Implement the `summarize(diff)` function that returns a concise human-readable summary string (e.g., "3 changes: 1 instruction modified, 1 example added, variable {{name}} renamed to {{full_name}}. Token impact: +45 tokens."). Group by change type and count. | Status: done
 - [ ] **Implement src/apply.ts — basic patch application** — Implement the `apply(prompt, diff)` function that applies a `PromptDiff` as a patch to transform prompt A into prompt B. Apply changes in reverse offset order to avoid position shifting. | Status: not_done
 - [ ] **Implement apply.ts — conflict detection** — Detect when applying a patch to a prompt that does not match the expected `before` content. Report conflicts rather than silently corrupting the prompt. | Status: not_done
 
