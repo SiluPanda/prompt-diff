@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { diff, parse, format, summarize } from '../index.js';
+import { normalizedSimilarity } from '../align/similarity.js';
 
 describe('Integration Tests', () => {
   describe('Full API surface', () => {
@@ -181,6 +182,20 @@ Return JSON.`,
 
       expect(result.identical).toBe(false);
       expect(result.changes.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('Similarity scoring regression', () => {
+    it('normalizedSimilarity never exceeds 1.0 even with repeated words', () => {
+      // Previously, repeated words in A could inflate coverage above 1.0
+      const score = normalizedSimilarity('hello hello hello world', 'hello world');
+      expect(score).toBeLessThanOrEqual(1.0);
+      expect(score).toBeGreaterThanOrEqual(0);
+    });
+
+    it('normalizedSimilarity returns 1.0 for identical text', () => {
+      const score = normalizedSimilarity('hello world', 'hello world');
+      expect(score).toBe(1.0);
     });
   });
 });

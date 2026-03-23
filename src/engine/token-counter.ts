@@ -12,8 +12,8 @@ export function calculateTokenImpact(
   const tokensAfter = after ? estimateTokens(after) : 0;
 
   return {
-    tokensAdded: Math.max(0, tokensAfter - (before ? Math.min(tokensBefore, tokensAfter) : 0)),
-    tokensRemoved: Math.max(0, tokensBefore - (after ? Math.min(tokensBefore, tokensAfter) : 0)),
+    tokensAdded: Math.max(0, tokensAfter - tokensBefore),
+    tokensRemoved: Math.max(0, tokensBefore - tokensAfter),
   };
 }
 

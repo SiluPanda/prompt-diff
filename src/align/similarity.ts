@@ -25,21 +25,20 @@ export function jaccardSimilarity(a: string, b: string): number {
  * More lenient than Jaccard for texts of different lengths.
  */
 export function normalizedSimilarity(a: string, b: string): number {
-  const wordsA = tokenize(normalizeText(a));
-  const wordsB = tokenize(normalizeText(b));
+  const setA = new Set(tokenize(normalizeText(a)));
+  const setB = new Set(tokenize(normalizeText(b)));
 
-  if (wordsA.length === 0 && wordsB.length === 0) return 1;
-  if (wordsA.length === 0 || wordsB.length === 0) return 0;
+  if (setA.size === 0 && setB.size === 0) return 1;
+  if (setA.size === 0 || setB.size === 0) return 0;
 
-  const setB = new Set(wordsB);
-  let matches = 0;
-  for (const word of wordsA) {
-    if (setB.has(word)) matches++;
+  let intersection = 0;
+  for (const word of setA) {
+    if (setB.has(word)) intersection++;
   }
 
-  // Use the average of both coverage ratios
-  const coverageA = matches / wordsA.length;
-  const coverageB = matches / wordsB.length;
+  // Average of both coverage ratios (always in [0, 1])
+  const coverageA = intersection / setA.size;
+  const coverageB = intersection / setB.size;
 
   return (coverageA + coverageB) / 2;
 }

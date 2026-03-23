@@ -292,4 +292,18 @@ describe('Diff Engine', () => {
       expect(result.severityCounts).toBeDefined();
     });
   });
+
+  describe('Token impact calculation', () => {
+    it('reports correct token delta for added content', () => {
+      const result = diff('Short.', 'Short prompt with more words added here.');
+      expect(result.tokenImpact.net).toBeGreaterThan(0);
+      expect(result.tokenImpact.totalAdded).toBeGreaterThan(0);
+    });
+
+    it('reports correct token delta for removed content', () => {
+      const result = diff('Long prompt with many extra words here.', 'Short.');
+      expect(result.tokenImpact.net).toBeLessThan(0);
+      expect(result.tokenImpact.totalRemoved).toBeGreaterThan(0);
+    });
+  });
 });
