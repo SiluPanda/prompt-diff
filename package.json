@@ -1,5 +1,5 @@
 {
-  "name": "prompt-diff",
+  "name": "@silupanda/prompt-diff",
   "version": "0.2.2",
   "description": "Semantic diff engine for prompts",
   "main": "dist/index.js",
